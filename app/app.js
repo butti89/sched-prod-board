@@ -82,5 +82,22 @@ function showLoaded(incidents) {
   empty.hidden = incidents.length > 0;
 }
 
-const page = await fetchIncidents();
-showLoaded(page.incidents);
+const REFRESH_MS = 2000;
+let inFlight = false;
+
+/** One refresh: fetch what is current and show it. A slow answer is never overlapped by the next tick. */
+async function refresh() {
+  if (inFlight) return;
+  inFlight = true;
+  try {
+    const page = await fetchIncidents();
+    showLoaded(page.incidents);
+  } catch (err) {
+    console.error(err);
+  } finally {
+    inFlight = false;
+  }
+}
+
+await refresh();
+setInterval(refresh, REFRESH_MS);
