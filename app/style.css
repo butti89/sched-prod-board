@@ -12,3 +12,7 @@ footer { color: #777; font-size: 13px; }
 .row button { font: inherit; padding: 4px 14px; border: 1px solid #1d1d1f; border-radius: 6px; background: #fff; cursor: pointer; }
 .row button:disabled { opacity: .5; cursor: progress; }
 .row .acked { color: #1a7f37; font-weight: 600; }
+.loader { color: #666; }
+.loader::before { content: ""; display: inline-block; width: 12px; height: 12px; margin-right: 8px; vertical-align: -1px; border: 2px solid #ccc; border-top-color: #1d1d1f; border-radius: 50%; animation: spin .8s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.empty { color: #666; }

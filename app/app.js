@@ -1,6 +1,7 @@
 import { fetchIncidents, ack } from './api.js';
 
 const list = document.querySelector('[data-testid="incident-list"]');
+const empty = document.querySelector('[data-testid="empty"]');
 
 /** Incident ids acked from this page, so the mark survives every re-render. */
 const acked = new Set();
@@ -75,5 +76,11 @@ function render(incidents) {
   });
 }
 
+function showLoaded(incidents) {
+  document.querySelector('[data-testid="loader"]')?.remove();
+  render(incidents);
+  empty.hidden = incidents.length > 0;
+}
+
 const page = await fetchIncidents();
-render(page.incidents);
+showLoaded(page.incidents);
