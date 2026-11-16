@@ -54,34 +54,42 @@ function ackButton(id) {
   return button;
 }
 
+/** Writes the incident's current fields into its row; the Ack button or acked mark is left as it is. */
+function fill(li, incident) {
+  li.className = `row ${incident.severity}`;
+  li.querySelector('.sev').textContent = incident.severity;
+  li.querySelector('.what').textContent = `${incident.service} · ${incident.region} · ${incident.summary}`;
+  const time = li.querySelector('time');
+  time.dateTime = incident.openedAt;
+  time.title = incident.openedAt;
+  time.textContent = localTime.format(new Date(incident.openedAt));
+  return li;
+}
+
 function row(incident) {
   const li = document.createElement('li');
   li.dataset.testid = 'incident-row';
   li.dataset.id = incident.id;
-  li.className = `row ${incident.severity}`;
-
-  const time = document.createElement('time');
-  time.dateTime = incident.openedAt;
-  time.title = incident.openedAt;
-  time.textContent = localTime.format(new Date(incident.openedAt));
-
   li.append(
     cell('id', incident.id),
-    cell('sev', incident.severity),
-    cell('what', `${incident.service} · ${incident.region} · ${incident.summary}`),
-    time,
+    cell('sev', ''),
+    cell('what', ''),
+    document.createElement('time'),
     acked.has(incident.id) ? ackedMark() : ackButton(incident.id),
   );
-  return li;
+  return fill(li, incident);
 }
 
 /**
- * Brings the list in line with `incidents`, newest first. Rows already on screen are kept (an Ack in
- * flight keeps its button); new incidents get new rows, and incidents no longer listed are removed.
+ * Brings the list in line with `incidents`, newest first. Rows already on screen are kept and refilled
+ * with the incident's current fields (an Ack in flight keeps its button); new incidents get new rows, and
+ * incidents no longer listed are removed.
  */
 function render(incidents) {
   const current = new Map([...list.children].map((li) => [li.dataset.id, li]));
-  const ordered = [...incidents].sort(byNewest).map((incident) => current.get(incident.id) ?? row(incident));
+  const ordered = [...incidents]
+    .sort(byNewest)
+    .map((incident) => (current.has(incident.id) ? fill(current.get(incident.id), incident) : row(incident)));
   const keep = new Set(ordered);
   for (const li of current.values()) if (!keep.has(li)) li.remove();
   ordered.forEach((li, index) => {
