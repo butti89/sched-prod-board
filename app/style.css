@@ -16,3 +16,4 @@ footer { color: #777; font-size: 13px; }
 .loader::before { content: ""; display: inline-block; width: 12px; height: 12px; margin-right: 8px; vertical-align: -1px; border: 2px solid #ccc; border-top-color: #1d1d1f; border-radius: 50%; animation: spin .8s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
 .empty { color: #666; }
+footer code { font-family: ui-monospace, monospace; }
