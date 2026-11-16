@@ -6,6 +6,18 @@ const empty = document.querySelector('[data-testid="empty"]');
 /** Incident ids acked from this page, so the mark survives every re-render. */
 const acked = new Set();
 
+/**
+ * The viewer's own locale and time zone (both from the browser): the locale sets the order, so en-GB,
+ * de-DE and en-NZ read day before month and en-US month before day; the zone name removes any doubt.
+ */
+const localTime = new Intl.DateTimeFormat(undefined, {
+  day: '2-digit',
+  month: '2-digit',
+  hour: '2-digit',
+  minute: '2-digit',
+  timeZoneName: 'short',
+});
+
 function byNewest(a, b) {
   return Date.parse(b.openedAt) - Date.parse(a.openedAt);
 }
@@ -50,7 +62,8 @@ function row(incident) {
 
   const time = document.createElement('time');
   time.dateTime = incident.openedAt;
-  time.textContent = incident.openedAt;
+  time.title = incident.openedAt;
+  time.textContent = localTime.format(new Date(incident.openedAt));
 
   li.append(
     cell('id', incident.id),
