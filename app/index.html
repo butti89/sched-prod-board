@@ -13,10 +13,26 @@
       <h1>incidents</h1>
       <p class="sub">sched-prod · tonight</p>
     </header>
-    <main data-testid="board">
-      <p data-testid="loader" class="loader" role="status">Loading tonight's incidents…</p>
-      <p data-testid="empty" class="empty" hidden>No incidents tonight.</p>
-      <ul data-testid="incident-list" class="list"></ul>
+    <main data-testid="board" class="board">
+      <section class="incidents" aria-label="Tonight's incidents">
+        <p data-testid="loader" class="loader" role="status">Loading tonight's incidents…</p>
+        <p data-testid="empty" class="empty" hidden>No incidents tonight.</p>
+        <ul data-testid="incident-list" class="list"></ul>
+      </section>
+      <aside id="incident-panel" data-testid="incident-panel" class="panel" aria-labelledby="panel-title" aria-live="polite" hidden>
+        <div class="panel-head">
+          <h2 id="panel-title"><span class="panel-id"></span> <span class="panel-sev"></span></h2>
+          <button type="button" class="panel-close" aria-label="Close the incident panel">×</button>
+        </div>
+        <dl>
+          <dt>Service</dt><dd class="panel-service"></dd>
+          <dt>Region</dt><dd class="panel-region"></dd>
+          <dt>Summary</dt><dd class="panel-summary"></dd>
+          <dt>Opened</dt><dd><time class="panel-opened"></time></dd>
+        </dl>
+        <button type="button" data-testid="panel-ack" class="panel-ack">Ack</button>
+        <p class="panel-status" role="status"></p>
+      </aside>
     </main>
     <footer>sched-prod incident board · build <code data-testid="build-sha">__BUILD_SHA__</code></footer>
   </body>
